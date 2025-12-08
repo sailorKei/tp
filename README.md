@@ -36,18 +36,7 @@ python -m venv labenv310
 bash
  
 pip install -r requirements.txt
-Exemple de requirements.txt :
 
-text
- 
-torch
-torchvision
-timm
-pandas
-numpy
-scikit-learn
-Pillow
-matplotlib
 🗂️ Jeu de données FaceForensics++ C23
 Dataset téléchargé depuis Kaggle :
 
