@@ -1,0 +1,12 @@
+faceforensics_c23/
+*.csv
+*.jpg
+*.png
+*.mp4
+*.zip
+*.avi
+*.npy
+__pycache__/
+.vscode/
+labenv/
+labenv310/
