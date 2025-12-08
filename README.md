@@ -1,56 +1,55 @@
-# Détection de Deepfakes avec XceptionNet (FaceForensics++ C23)
+# Deepfake Detection using XceptionNet (FaceForensics++ C23)
 
-Projet réalisé en PyTorch pour la classification d’images **Original vs Deepfake**  
-en utilisant le modèle **XceptionNet pré-entraîné**.
+This project performs binary classification (**Real vs Deepfake**) using a **pretrained XceptionNet** model fined-tuned on the **FaceForensics++ C23 dataset**.
 
 ---
 
-## 📁 Structure du projet
+## 📁 Project Structure
 
 deepfake-xception/
 │── notebooks/
-│ └── deepfake_xception.ipynb ← Notebook principal
+│     └── deepfake_xception.ipynb   ← Main notebook
 │
 │── models/
-│ └── best_xception_deepfake.pth ← Poids sauvegardés
+│     └── best_xception_deepfake.pth   ← Saved model weights
 │
 │── data/
-│ └── README.md ← instructions pour télécharger le dataset Kaggle
+│     └── README.md   ← Instructions to download the dataset
 │
 │── requirements.txt
 │── README.md
 
-yaml
- 
-
 ---
 
-## 📦 Installation
+## ⚙️ Installation
 
-### 1) Créer un environnement Python 3.10
+### 1) Create Python environment (3.10 recommended)
 
 ```bash
 python -m venv labenv310
-.\labenv310\Scripts\activate
-2) Installer les dépendances
-bash
- 
+.\labenv310\Scriptsctivate
+```
+
+### 2) Install required libraries
+
+```bash
 pip install -r requirements.txt
+```
 
-🗂️ Jeu de données FaceForensics++ C23
-Dataset téléchargé depuis Kaggle :
+---
 
-👉 https://www.kaggle.com/datasets/fatimahirshad/faceforensics-extracted-dataset-c23
+## 🗂️ Dataset — FaceForensics++ C23
 
-Classes utilisées :
+Download from Kaggle:
 
-0 : Original
+https://www.kaggle.com/datasets/fatimahirshad/faceforensics-extracted-dataset-c23
 
-1 : Deepfake
+Classes:
+- **0 = Original**
+- **1 = Deepfake**
 
-Données organisées en :
+Folder structure:
 
- 
 faceforensics_c23/
 │── CSVS/
 │     ├── Original.csv
@@ -59,75 +58,76 @@ faceforensics_c23/
 └── FF++C23-Frames/
       ├── Original/
       └── Deepfakes/
-⚠️ Le dataset n’est pas inclus dans ce repo (taille trop grande).
-Merci de le télécharger et de le placer sous ./faceforensics_c23/.
 
-🧠 Modèle utilisé : XceptionNet
-Nous utilisons XceptionNet via la bibliothèque timm.
+⚠️ The dataset is **NOT included** in this repository due to size.  
+Please download and place it in `./faceforensics_c23/`.
 
-Caractéristiques :
+---
 
-Architecture State of the Art
+## 🧠 Model — XceptionNet
 
-Pré-entraînée sur ImageNet
+We use **XceptionNet** through the `timm` library.
 
-Convolutions séparables en profondeur
+### Key characteristics:
+- **State-of-the-art architecture** for image forensics
+- **Pretrained on ImageNet**
+- Depthwise separable convolutions
+- Adapted for **binary classification**
 
-Nous remplaçons uniquement la dernière couche pour 2 classes
+### Customization:
+- Final layer changed from **1000 outputs → 2 outputs**
+- Fine-tuned on our dataset (transfer learning)
 
-Détails de l’optimisation :
-Fonction de perte : CrossEntropyLoss
+### Optimization:
+- Loss: `CrossEntropyLoss`
+- Optimizer: `AdamW(lr=1e-4, weight_decay=1e-4)`
+- Scheduler: `ReduceLROnPlateau` (reduces LR when validation stalls)
+- Regularization: L2 (weight decay)
+- Early stopping: patience = 3 epochs
 
-Optimiseur : AdamW (lr=1e-4)
+---
 
-Régularisation : weight_decay=1e-4 (L2)
+## 📊 Results
 
-Scheduler : ReduceLROnPlateau (réduction dynamique du LR)
+### 🔢 Metrics
+| Metric | Value |
+|------|------|
+Validation Accuracy (best) | ~80.5 %  
+Test Accuracy | ~75.6 %  
 
-Early stopping (patience = 3 epochs)
+### 🧮 Confusion Matrix
+|               | Pred Original | Pred Deepfake |
+|---------------|----------------|----------------|
+| True Original | 811 | 189 |
+| True Deepfake | 299 | 701 |
 
-🧪 Résultats obtenus
-🔢 Scores
-Metric	Valeur
-Validation Accuracy max	~80.5 %
-Test Accuracy	~75.6 %
+### 📝 Classification Report
+- Original: Recall = **0.81**
+- Deepfake: Precision = **0.79**
 
-📊 Matrice de confusion (test)
-Prédit Original	Prédit Deepfake
-Vrai Original	811	189
-Vrai Deepfake	299	701
+📌 Interpreting results:
+- The model performs well overall.
+- Detecting compressed/realistic deepfakes remains challenging (consistent with literature).
 
-📋 Rapport de classification (test)
-Original : Recall = 0.81
+---
 
-Deepfake : Precision = 0.79
+## 📓 Notebook
 
-Conclusion :
+Everything (data loading, training, evaluation, metrics) is inside:
 
-Le modèle détecte bien les originaux.
-
-Certains deepfakes compressés restent difficiles.
-
-📓 Notebook fourni
-Tout le code, l’entraînement, les tests et les métriques sont détaillés dans :
-
-bash
- 
+```
 notebooks/deepfake_xception.ipynb
-🏗️ Framework utilisé
-PyTorch
+```
 
-timm
+---
 
-Transfert learning
+## 🧑‍🔬 Scientific Reference
 
-GPU CUDA (RTX 3050)
+**FaceForensics++: Learning to Detect Manipulated Facial Images**  
+Rössler et al., ICCV 2019.
 
-📚 Référence principale (Article FaceForensics++)
-Rössler et al., FaceForensics++: Learning to Detect Manipulated Facial Images, ICCV 2019.
+---
 
-📝 Licence
-Projet académique — usage pédagogique uniquement.
+## 🏷️ License
 
-yaml
- 
+Educational use only.
